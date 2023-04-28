@@ -1,14 +1,9 @@
 ﻿global using Ecommerce.Core.Model;
 
-namespace Ecommerce.Models
+namespace Ecommerce.Models;
+
+public class Brand : Entity
 {
-    public class Brand : BaseClass
-    {
-        public Brand()
-        {
-            Products = new List<Product>();
-        }
-        public string Bio { get; set; }
-        public List<Product> Products { get; set; }
-    }
+    public string Bio { get; set; }
+    public List<Product> Products { get; set; } = new List<Product>();
 }

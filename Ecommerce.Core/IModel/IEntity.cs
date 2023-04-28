@@ -1,0 +1,7 @@
+﻿namespace Ecommerce.Core.IModel;
+public interface IEntity
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+
+}

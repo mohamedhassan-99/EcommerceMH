@@ -1,6 +1,6 @@
 ﻿namespace Ecommerce.Models
 {
-    public class Category : BaseClass
+    public class Category : Entity
     {
         public Category()
         {

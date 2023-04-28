@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Core.Model
+namespace Ecommerce.Core.Enum
 {
-    public class BaseClass
+    public enum ProductIncludes
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        Brand,
+        Categories
     }
 }
