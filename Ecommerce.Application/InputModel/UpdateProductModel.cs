@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Application.InputModel
 {
-    public class BrandInputModel
+    public class UpdateProductModel : CreateProductModel
     {
-        public string Name { get; set; }
-        public string Bio { get; set; }
+        public Guid Id { get; set; }
     }
 }
