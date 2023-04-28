@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Ecommerce.Core.Enum;
+using Ecommerce.Core.IModel;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Ecommerce.Infrastructure.IBaseRepository
+namespace Ecommerce.Infrastructure.IBaseRepository;
+
+public interface IRepository<T> where T : class, IEntity
 {
-
-    public interface IRepository<T>
-    {
-        void Create(T model);
-        T Edit(T model);
-        IList<T> Get();
-        IList<T> FindBy(Expression<Func<T, bool>> predicate);
-        T FindOne (Expression<Func<T, bool>> predicate);
-        void Delete(T model);
-        void Save();
-    }
-
+    Task CreateAsync(T model);
+    void Edit(T model);
+    Task<IList<T>> GetAllAsync();
+    Task<IList<T>> GetByAsync(Expression<Func<T, bool>> predicate);
+    Task<T?> GetSingleAsync (Expression<Func<T, bool>> predicate, ProductIncludes includes);
+    Task<T?> GetSingleAsync (Guid typeEntityId);
+    Task DeleteAsync(Guid model);
+    Task SaveAsync();
 }
