@@ -14,10 +14,7 @@ namespace Ecommerce.Application.MappingProfiles
     {
         public Profiles()
         {
-            CreateMap<Product,ProductInputModel>().ReverseMap();
-            CreateMap<Brand,BrandInputModel>().ReverseMap();
-            CreateMap<Category,CategoryInputModel>().ReverseMap();
-
+            CreateMap<Product,CreateProductModel>().ReverseMap();
             CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Brand, BrandViewModel>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
