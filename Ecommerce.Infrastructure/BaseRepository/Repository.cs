@@ -1,59 +1,42 @@
-﻿using Ecommerce.Infrastructure.AppContext;
+﻿using Ecommerce.Core.Enum;
+using Ecommerce.Core.IModel;
+using Ecommerce.Infrastructure.AppContext;
 using Ecommerce.Infrastructure.IBaseRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ecommerce.Infrastructure.BaseRepository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
-        private readonly EcommerceDbContext _context;
+        private readonly AppDbContext _context;
 
-        public Repository(EcommerceDbContext context)
-        {
-            _context = context;
-        }
-        public void Create(T model)
-        {
-            _context.Set<T>().Add(model);
-            Save();
-        }
+        public Repository(AppDbContext context)
+            => _context = context;
+        public async Task CreateAsync(T model)
+            => await _context.Set<T>().AddAsync(model);
 
-        public void Delete(T model)
-        {
-            _context.Set<T>().Remove(model);
-            Save();
-        }
+        public async Task DeleteAsync(Guid id)
+            => await _context.Set<T>().Where(a => a.Id == id).ExecuteDeleteAsync();
 
-        public T Edit(T model)
-        {
-            _context.Set<T>().Update(model);
-            Save();
-            return model;
-        }
+        public void Edit(T model)
+            => _context.Set<T>().Update(model);
 
-        public T FindOne(Expression<Func<T, bool>> predicate)
-        {
-            return _context.Set<T>().Where(predicate).SingleOrDefault();
-        }
+        public virtual async Task<T?> GetSingleAsync(Expression<Func<T, bool>> predicate, ProductIncludes includes)
+            => await _context.Set<T>().Include(includes.ToString()).Where(predicate).SingleOrDefaultAsync();
+        
+        public async Task<T?> GetSingleAsync(Guid typeEntityId)
+            => await _context.Set<T>().FindAsync(typeEntityId);
+        
+        public async Task<IList<T>> GetByAsync(Expression<Func<T, bool>> predicate)
+            => await _context.Set<T>().Where(predicate).ToListAsync();
 
-        public IList<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
-        {
-            return _context.Set<T>().Where(predicate).ToList<T>();
-        }
+        public virtual async Task<IList<T>> GetAllAsync()
+            => await _context.Set<T>().AsNoTracking().ToListAsync();
 
-        public IList<T> Get()
-        {
-            return _context.Set<T>().ToList<T>();
-        }
+        public async Task SaveAsync()
+            => await _context.SaveChangesAsync();
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+
     }
 }
