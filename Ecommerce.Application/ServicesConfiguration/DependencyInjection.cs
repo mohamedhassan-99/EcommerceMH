@@ -9,12 +9,9 @@ namespace Ecommerce.Application.ServicesConfiguration;
 
 public static class DependencyInjection
 {
-    public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApplication(this IServiceCollection services)
     {
-        services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-
-        services.AddTransient<IProductRepository, ProductRepository>();
-        
-        services.AddTransient<IProductService, ProductService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IProductService, ProductService>();
     }
 }
