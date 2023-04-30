@@ -5,6 +5,9 @@ using Ecommerce.Web.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,7 @@ builder.Host.UseSerilog((hostContext, loggerbuider) =>
                   restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error,
                   rollingInterval: RollingInterval.Day);
 });
+
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

@@ -1,11 +1,9 @@
 ﻿using Ecommerce.Application.InputModel;
 using Ecommerce.Application.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Ecommerce.Web.Controllers.Api;
-
 [ApiController]
 [Route("[controller]")]
 public class ProductController : ControllerBase
@@ -26,7 +24,7 @@ public class ProductController : ControllerBase
     [HttpPost("CreateProduct")]
     public async Task<IActionResult> CreateProduct(CreateProductModel? productInput)
         => Ok(new string[] { await _productService.CreateProductAsync(productInput) });
-
+    
     [HttpGet("GetAllProducts")]
     public async Task<IActionResult> GetAllProducts()
         => Ok(await _productService.GetAllProductsAsync());
