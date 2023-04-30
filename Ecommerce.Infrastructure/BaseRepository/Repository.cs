@@ -34,9 +34,5 @@ namespace Ecommerce.Infrastructure.BaseRepository
         public virtual async Task<IList<T>> GetAllAsync()
             => await _context.Set<T>().AsNoTracking().ToListAsync();
 
-        public async Task SaveAsync()
-            => await _context.SaveChangesAsync();
-
-
     }
 }

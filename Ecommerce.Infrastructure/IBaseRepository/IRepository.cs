@@ -13,5 +13,4 @@ public interface IRepository<T> where T : class, IEntity
     Task<T?> GetSingleAsync (Expression<Func<T, bool>> predicate, ProductIncludes includes);
     Task<T?> GetSingleAsync (Guid typeEntityId);
     Task DeleteAsync(Guid model);
-    Task SaveAsync();
 }
