@@ -3,14 +3,29 @@ using Ecommerce.Infrastructure.AppContext;
 using Ecommerce.Infrastructure.ServiceConfiguration;
 using Ecommerce.Web.Middlewares;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddApplication();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers();
+builder.Host.UseSerilog((hostContext, loggerbuider) =>
+{
+    loggerbuider
+    .Enrich.FromLogContext()
+    .WriteTo.File(path: "Logs/",
+                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error,
+                  rollingInterval: RollingInterval.Day);
+});
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.IgnoreNullValues = true;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -26,6 +41,8 @@ if (app.Environment.IsDevelopment())
 
 // that's my custom middleware
 app.UseMiddleware<MyExceptionHandlingMiddleware>();
+
+app.UseCors(act => act.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseHttpsRedirection();
 
@@ -43,3 +60,5 @@ static async Task MigrateDataBase(WebApplication app)
         await scopedServiceInstance.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
     }
 }
+
+
