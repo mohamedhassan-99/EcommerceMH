@@ -1,6 +1,8 @@
 ﻿using Ecommerce.Application.InputModel;
 using Ecommerce.Application.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Ecommerce.Web.Controllers.Api;
 
@@ -23,7 +25,7 @@ public class ProductController : ControllerBase
     /// <returns></returns>
     [HttpPost("CreateProduct")]
     public async Task<IActionResult> CreateProduct(CreateProductModel? productInput)
-        => Ok(await _productService.CreateProductAsync(productInput));
+        => Ok(new string[] { await _productService.CreateProductAsync(productInput) });
 
     [HttpGet("GetAllProducts")]
     public async Task<IActionResult> GetAllProducts()
@@ -42,8 +44,8 @@ public class ProductController : ControllerBase
         => Ok(await _productService.GetProductBrandAsync(productId));
 
     [HttpPut("UpdateProduct")]
-    public IActionResult UpdateProduct(UpdateProductModel updateProductModel)
-        => Ok(_productService.UpdateProduct(updateProductModel));
+    public async Task<IActionResult> UpdateProduct(UpdateProductModel updateProductModel)
+        => Ok(new string[] { await _productService.UpdateProduct(updateProductModel) });
 
     [HttpDelete("DeleteProduct")]
     public async Task<IActionResult> DeleteProduct(Guid productId)
