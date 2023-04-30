@@ -8,7 +8,7 @@ namespace Ecommerce.Application.IServices
         Task<string> CreateProductAsync(CreateProductModel? productInput);
         Task<List<ProductViewModel>> GetAllProductsAsync();
         Task<ProductViewModel> GetProductAsync(Guid id);
-        string UpdateProduct(UpdateProductModel productInput);
+        Task<string> UpdateProduct(UpdateProductModel productInput);
         Task<string> DeleteProductAsync(Guid productId);
         Task<BrandViewModel> GetProductBrandAsync(Guid productId);
         Task<List<CategoryViewModel>> GetProductCategoriesAsync(Guid productId);
