@@ -7,10 +7,11 @@ namespace Ecommerce.Web.Middlewares;
 public class MyExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _delegate;
-    private readonly ILogger _logger;
+    private readonly Serilog.ILogger _logger;
 
-    public MyExceptionHandlingMiddleware(RequestDelegate @delegate, ILogger logger)
+    public MyExceptionHandlingMiddleware(RequestDelegate @delegate, Serilog.ILogger logger)
     {
+        //'@' prefix becuase the word 'delegate' is from System namespace keywords but i insist in using the meaninigful name of the parametar
         _delegate = @delegate;
         _logger = logger;
     }
@@ -30,7 +31,6 @@ public class MyExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var currentUserName = context.User.Claims.Where(x => x.Type == "emailaddress").FirstOrDefault()?.Value ?? String.Empty;
 
         context.Response.ContentType = "application/json";
 
@@ -41,12 +41,6 @@ public class MyExceptionHandlingMiddleware
             Success = false
         };
 
-        if (exception.Message.Contains("Invalid token"))
-        {
-            response.StatusCode = (int)HttpStatusCode.Forbidden;
-            errorResponse.Message = exception.Message;
-            await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
-        }
 
         switch (exception)
         {
@@ -56,11 +50,11 @@ public class MyExceptionHandlingMiddleware
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 if (exception.Message == null || exception.Message.Length >= 65)
-                    errorResponse.Message = "Internal Server errors. Check Logs!";
+                    errorResponse.Message = "Internal server errors. check logs!";
                 else
                     errorResponse.Message = exception.Message;
 
-                _logger.LogError($"{currentUserName} Something went wrong | {exception}");
+                _logger.Error($"Something went wrong | {exception}");
                 break;
         }
 
