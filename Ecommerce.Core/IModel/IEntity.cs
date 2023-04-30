@@ -1,7 +1,11 @@
 ﻿namespace Ecommerce.Core.IModel;
 public interface IEntity
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
+    Guid Id { get; set; }
+    string Name { get; set; }
+    Guid CreatedBy { get; set; }
+    DateTime CreatedDate { get; set; }
+    Guid? ModifiedBy { get; set; }
+    DateTime? ModifiedDate { get; set; }
 
 }
