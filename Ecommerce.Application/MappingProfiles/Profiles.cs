@@ -15,7 +15,7 @@ namespace Ecommerce.Application.MappingProfiles
         public Profiles()
         {
             CreateMap<Product,CreateProductModel>().ReverseMap();
-            CreateMap<Product, ProductViewModel>().ReverseMap();
+            CreateMap<Product, ProductViewModel>().ForMember(dest => dest.BrandId,cfg => cfg.MapFrom(src => src.BrandId ?? Guid.Empty)).ReverseMap();
             CreateMap<Brand, BrandViewModel>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
         }
